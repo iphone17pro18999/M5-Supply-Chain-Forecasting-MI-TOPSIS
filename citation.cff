@@ -3,9 +3,9 @@ title: "A Neural Network-Based Decision Framework for Supply Chain Demand Foreca
 message: "If you use this repository, please cite the associated paper."
 type: software
 authors:
-  - family-names: "Sehgal"
-    given-names: "Tanav"
-repository-code: "https://github.com/USERNAME/M5-Supply-Chain-Forecasting-MI-TOPSIS"
+  - family-names: "GUIJIA"
+    given-names: "HE"
+repository-code: "https://github.com/iphone17pro18999/M5-Supply-Chain-Forecasting-MI-TOPSIS"
 license: "MIT"
 keywords:
   - supply chain demand forecasting
