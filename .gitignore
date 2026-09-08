@@ -1,0 +1,14 @@
+__pycache__/
+.ipynb_checkpoints/
+*.pyc
+*.pkl
+*.joblib
+*.zip
+
+# Raw M5 files are large and should be downloaded separately
+data/raw/*.csv
+data/raw/*.zip
+
+# Operating-system files
+.DS_Store
+Thumbs.db

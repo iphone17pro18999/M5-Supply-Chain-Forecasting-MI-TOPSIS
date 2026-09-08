@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+title: "A Neural Network-Based Decision Framework for Supply Chain Demand Forecasting with Mutual Information-Guided Features and Entropy-TOPSIS Evaluation"
+message: "If you use this repository, please cite the associated paper."
+type: software
+authors:
+  - family-names: "Sehgal"
+    given-names: "Tanav"
+repository-code: "https://github.com/USERNAME/M5-Supply-Chain-Forecasting-MI-TOPSIS"
+license: "MIT"
+keywords:
+  - supply chain demand forecasting
+  - M5 dataset
+  - Mutual Information
+  - multilayer perceptron
+  - Entropy-TOPSIS
+  - rolling-origin validation
+  - demand-regime classification
