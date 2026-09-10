@@ -1,7 +1,7 @@
 """Step 10 — reproduce the exact three fixed target-date folds for 28-day item-store forecasting."""
 import time,pandas as pd
 from common import PROCESSED,OUT,REF,SEED,ensure_dirs,metrics
-from modeling import candidate_columns,build_pipeline
+from modeling import candidate_columns,build_pipeline,build_exact_mi_mlp_pipeline
 
 MODELS=["Ridge_All","Boosting_All","MLP_All","MI_MLP_Top10"]
 
@@ -25,15 +25,11 @@ def main():
         allcols=candidate_columns(tr)
         for name in MODELS:
             if name=="MI_MLP_Top10":
-                selected=[]
-                for feat in top10:
-                    if feat in allcols:selected.append(feat)
-                    else:
-                        base=feat.split("_")[0]
-                        if base in allcols and base not in selected:selected.append(base)
-                selected=selected[:10]
-            else:selected=allcols
-            pipe=build_pipeline(name,tr,selected,category=False,seed=SEED)
+                selected=allcols
+                pipe=build_exact_mi_mlp_pipeline(tr,allcols,top10,category=False,seed=SEED)
+            else:
+                selected=allcols
+                pipe=build_pipeline(name,tr,selected,category=False,seed=SEED)
             t0=time.perf_counter();pipe.fit(tr[selected],tr.target);fit_s=time.perf_counter()-t0
             t0=time.perf_counter();yp=pipe.predict(te[selected]);pred_s=time.perf_counter()-t0
             te2=te.copy();te2["predicted"]=yp

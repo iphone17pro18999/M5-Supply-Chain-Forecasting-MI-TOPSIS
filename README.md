@@ -38,7 +38,7 @@ The raw M5 files are not redistributed here because they are subject to the comp
 
 ## Environment
 
-Recommended Python: **3.10 or 3.11**
+Recommended Python: **3.11** (the repository also includes `.python-version`).
 
 Install dependencies:
 

@@ -7,9 +7,9 @@ STORES=["CA_1","TX_1","WI_1"]
 
 def stats(x):
     x=np.asarray(x,float);nz=np.flatnonzero(x>0)
-    adi=float(np.diff(nz).mean()) if len(nz)>=2 else float(len(x))
+    adi=float(len(x)/len(nz)) if len(nz)>0 else float(len(x))
     pos=x[x>0]
-    cv2=float((pos.std(ddof=0)/pos.mean())**2) if len(pos) and pos.mean()!=0 else float("inf")
+    cv2=float((pos.std(ddof=1)/pos.mean())**2) if len(pos) and pos.mean()!=0 else float("inf")
     if adi<1.32 and cv2<0.49:r="Smooth"
     elif adi>=1.32 and cv2<0.49:r="Intermittent"
     elif adi<1.32 and cv2>=0.49:r="Erratic"

@@ -35,7 +35,7 @@ def main():
         cols=candidate_columns(tr)
         X,names=encode_for_mi(tr,cols)
         t0=time.perf_counter()
-        mi=mutual_info_regression(X,tr["target"].to_numpy(),random_state=SEED)
+        mi=mutual_info_regression(X,tr["target"].to_numpy(),random_state=SEED,n_jobs=1)
         rt=time.perf_counter()-t0
         r=pd.DataFrame({"horizon":h,"feature":names,"MI_score":mi}).sort_values("MI_score",ascending=False).reset_index(drop=True)
         r["MI_rank"]=r.index+1;r["MI_runtime_seconds"]=rt

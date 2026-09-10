@@ -1,7 +1,7 @@
 """Step 06 — reproduce five rolling-origin category-store folds with fixed 28-day validation/test blocks."""
 import time, pandas as pd
 from common import PROCESSED,OUT,REF,SEED,ensure_dirs,metrics
-from modeling import candidate_columns,build_pipeline
+from modeling import candidate_columns,build_pipeline,build_exact_mi_mlp_pipeline
 
 MODELS=["Ridge_All","RandomForest_All","Boosting_All","MLP_All",
         "MI_MLP_Top10","MI_MLP_Top15","MI_MLP_Top20"]
@@ -33,19 +33,12 @@ def main():
             for name in MODELS:
                 if name.startswith("MI_MLP_Top"):
                     k=int(name.split("Top")[-1])
-                    # MI output names are encoded names. Use corresponding base names when exact,
-                    # otherwise prefix-match known categorical bases.
-                    selected=[]
-                    for feat in top[k]:
-                        if feat in all_cols: selected.append(feat)
-                        else:
-                            base=feat.split("_")[0]
-                            if base in all_cols and base not in selected: selected.append(base)
-                    selected=selected[:k]
+                    selected_encoded=top[k]
+                    selected=all_cols
+                    pipe=build_exact_mi_mlp_pipeline(tr,all_cols,selected_encoded,category=True,seed=SEED)
                 else:
                     selected=all_cols
-
-                pipe=build_pipeline(name,tr,selected,category=True,seed=SEED)
+                    pipe=build_pipeline(name,tr,selected,category=True,seed=SEED)
                 t0=time.perf_counter();pipe.fit(tr[selected],tr["target"]);fit_s=time.perf_counter()-t0
 
                 # Validation block is retained chronologically for audit/tuning provenance.

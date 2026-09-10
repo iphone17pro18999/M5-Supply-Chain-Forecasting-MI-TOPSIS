@@ -49,7 +49,7 @@ def main():
     X=prep.fit_transform(tr[cols]);names=list(prep.get_feature_names_out())
     if X.shape[1]!=132:
         raise AssertionError(f"Expected 132 encoded item-store predictors, found {X.shape[1]}")
-    t0=time.perf_counter();mi=mutual_info_regression(X,tr.target.to_numpy(),random_state=SEED);rt=time.perf_counter()-t0
+    t0=time.perf_counter();mi=mutual_info_regression(X,tr.target.to_numpy(),random_state=SEED,n_jobs=1);rt=time.perf_counter()-t0
     rank=pd.DataFrame({"horizon":28,"feature":names,"MI_score":mi}).sort_values("MI_score",ascending=False).reset_index(drop=True)
     rank["MI_rank"]=rank.index+1;rank["MI_runtime_seconds"]=rt
     rank.to_csv(OUT/"item_store_mi_feature_ranking.csv",index=False)
