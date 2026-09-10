@@ -100,20 +100,25 @@ Full settings are centralized in `src/01_config.py`.
 - Mutual Information fitted on training data only;
 - ADI and CV² used only for regime classification and excluded from forecast predictors;
 - all model metrics are generated from predictions rather than entered manually;
-- the final audit compares generated outputs with archived reference results using stated tolerances.
+- the final audit compares generated outputs with reference results using stated tolerances.
 
 ## Repository map
 
 See:
 
 - `DATA.md` — source-data access and ethical redistribution notes
-- `docs/REPRODUCIBILITY.md` — detailed protocol
+- `docs/REPRODUCE.md` — detailed protocol
 - `docs/OUTPUT_MAP.md` — manuscript/SM output-to-code map
-- `docs/VARIABLE_DICTIONARY.md` — feature definitions
-- `outputs/reference/` — compact archived result files used only for reproducibility checks
+- `docs/VARIABLES.md` — feature definitions
+- `outputs/reference/` — compact reference result files used only for reproducibility checks
 - `outputs/generated/` — generated outputs after running the pipeline
 - `figures/generated/` — figures produced by Python scripts
 
 ## Citation
 
 Use the repository citation metadata in `citation.cff`.
+
+
+## Verification metadata
+
+The repository includes exact fold definitions, the exact 120-series item-store subset, feature-column manifests, and numerical reference outputs under `outputs/reference/`. Step 15 performs a strict reproducibility audit and intentionally fails when key analytical results do not reproduce within tolerance.

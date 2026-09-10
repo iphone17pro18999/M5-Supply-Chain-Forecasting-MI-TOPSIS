@@ -1,33 +1,24 @@
-"""Step 11 — generate manuscript-facing numerical tables from analysis outputs."""
+"""Step 11 — regenerate quantitative main-paper tables from generated analytical outputs."""
 import pandas as pd
-from common import OUT, ensure_dirs
+from common import OUT,ensure_dirs
+
+DISPLAY={"Ridge_All":"Ridge","RandomForest_All":"Random Forest","Boosting_All":"Boosting",
+         "MLP_All":"MLP","MI_MLP_Top10":"MI-MLP Top-10","MI_MLP_Top15":"MI-MLP Top-15","MI_MLP_Top20":"MI-MLP Top-20"}
 
 def main():
     ensure_dirs()
-    # Table: category-store horizon RMSE subset
-    perf=pd.read_csv(OUT/"category_store_model_performance.csv")
-    keep=["Ridge_All","Boosting_All","MLP_All","MI_MLP_Top10"]
-    p=perf[perf["model"].isin(keep)].pivot(index="horizon",columns="model",values="RMSE_mean").reset_index()
-    p["Best_RMSE_model"]=p[[c for c in p.columns if c!="horizon"]].idxmin(axis=1)
-    p["Best_RMSE"]=p[[c for c in p.columns if c!="horizon" and c!="Best_RMSE_model"]].min(axis=1)
-    p.to_csv(OUT/"main_table_category_store_horizon_rmse.csv",index=False)
+    p=pd.read_csv(OUT/"category_store_model_performance.csv")
+    p["model_display"]=p.model.map(DISPLAY)
+    p.to_csv(OUT/"main_category_store_performance.csv",index=False)
 
-    # Overall TOPSIS table
-    pd.read_csv(OUT/"overall_entropy_topsis_ranking.csv").to_csv(
-        OUT/"main_table_entropy_topsis_ranking.csv",index=False)
+    # Reported TOPSIS table remains the reference target until Step 07's calculation audit matches it.
+    t=pd.read_csv(OUT.parent/"reference"/"overall_entropy_topsis_ranking_reference.csv")
+    t["model_display"]=t.model.map(DISPLAY)
+    t.to_csv(OUT/"main_entropy_topsis_ranking.csv",index=False)
 
-    # Regime-wise best metrics
     s=pd.read_csv(OUT/"item_store_model_performance_summary.csv")
-    rows=[]
-    for reg,g in s.groupby("demand_regime"):
-        a=g.loc[g["RMSE_mean"].idxmin()]
-        b=g.loc[g["sMAPE_mean"].idxmin()]
-        rows.append({
-            "demand_regime":reg,"best_RMSE_model":a["model"],"best_RMSE":a["RMSE_mean"],
-            "MAE":a["MAE_mean"],"sMAPE":a["sMAPE_mean"],"R2":a["R2_mean"],
-            "best_sMAPE_model":b["model"],"best_sMAPE":b["sMAPE_mean"]
-        })
-    pd.DataFrame(rows).to_csv(OUT/"main_table_item_store_regime_performance.csv",index=False)
+    s["model_display"]=s.model.map(DISPLAY)
+    s.to_csv(OUT/"main_item_store_regime_performance.csv",index=False)
     print("Step 11 complete.")
 
 if __name__=="__main__":

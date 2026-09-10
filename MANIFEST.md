@@ -18,4 +18,3 @@ It intentionally excludes:
 - pre-rendered manuscript figures;
 - raw M5 source files;
 - large processed M5 derivatives;
-- internal project names and revision labels.

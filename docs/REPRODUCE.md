@@ -1,54 +1,45 @@
 # Reproducibility protocol
 
-## Philosophy
+## Raw data
+Use only the three public M5 source files documented in `DATA.md`.
 
-Every numerical result and analytical plot should be traceable to an executable Python step. No manuscript or supplementary document is required to reproduce the analysis.
+## Fixed experimental metadata
+The `outputs/reference/` directory contains compact, publication-neutral verification artifacts:
+- exact category-store fold definitions;
+- exact item-store fold definitions;
+- exact 120 selected item-store series;
+- feature-engineered column manifests;
+- reference category-store metrics;
+- reference item-store MI ranking;
+- reference item-store regime metrics;
+- reference overall Entropy-TOPSIS ranking.
 
-## Locked configuration
+These reference artifacts are not substitutes for computation. They are used by Step 15 to verify a fresh run.
 
-The model configuration is centralized in `src/01_config.py`. Settings were taken from the archived study Supplementary Material:
+## Category-store layer
+- 30 series = 3 categories × 10 stores.
+- h-day-ahead targets for h ∈ {1,7,14,28}.
+- 5 expanding chronological folds.
+- 28-day validation and 28-day test blocks per fold.
+- Ridge, Random Forest, Boosting, MLP, MI-MLP Top-10/15/20.
 
-- seed = 42
-- Ridge alpha = 1.0
-- Random Forest: 80 trees, max depth 16, minimum leaf size 2
-- HistGradientBoosting: learning rate 0.06, max leaf nodes 31, L2 regularization 0.1
-- category-store max iterations = 180
-- item-store max iterations = 160
-- MLP hidden layers = (96, 48)
-- ReLU activation
-- Adam solver
-- alpha = 0.0001
-- learning rate = 0.001
-- early stopping = True
-- validation fraction = 0.1
-- MI compact neural variants = Top-10, Top-15, Top-20 at category-store level and Top-10 at item-store level
+## Item-store layer
+- Full screening: 5,313 series.
+- Regime counts: Smooth 229, Intermittent 3,924, Erratic 121, Lumpy 1,039.
+- Reported experiment uses the exact fixed balanced subset of 120 series: 30/regime.
+- 28-day-ahead target.
+- Exact 3 target-date folds are stored in `outputs/reference/item_store_fold_definition.csv`.
+- Ridge, Boosting, MLP, MI-MLP Top-10.
 
-## Validation
+## Leakage and provenance controls
+- Demand lags use prior observations.
+- Demand rolling statistics are shifted.
+- Price rolling statistics are shifted.
+- ADI/CV² are classification/reporting variables only and are excluded from forecast design matrices.
+- The price missing-value handling reproduces the procedure reported in the Supplementary Material: within-series forward/backward filling after alignment.
+- Transformers and scalers are fitted to training data inside each model pipeline.
+- Random state is 42 where supported.
 
-Category-store:
-- 30 category-store series
-- 5 expanding rolling-origin folds
-- horizons 1, 7, 14, 28 days
-
-Item-store:
-- 3 departments × 3 stores screened
-- ADI/CV² demand classification
-- balanced sample of 30 series/regime
-- 3 expanding rolling-origin folds
-- 28-day horizon
-
-## Leakage control
-
-Demand lags use only prior observations.
-Rolling demand statistics are shifted by one period before window calculation.
-Rolling price statistics are shifted before aggregation.
-MI is computed on historical training observations.
-ADI and CV² are never included in the forecast design matrix.
-
-## Runtime differences
-
-Training and prediction times are hardware-dependent. The reproducibility audit therefore does not require runtime equality. Accuracy metrics are compared using a relative tolerance to accommodate package/platform numerical variation.
-
-## Expected verification targets
-
-The archived reference outputs are stored under `outputs/reference/`. They are used solely to verify that a fresh run reproduces the study's numerical pattern and principal conclusions.
+## Numerical verification
+Accuracy metrics are verified against reference outputs with tight numerical tolerance.
+Training and prediction times are reported but excluded from equality checks because they are hardware dependent.
