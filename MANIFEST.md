@@ -1,15 +1,21 @@
-# Package Manifest
+# Repository manifest
 
-This GitHub-ready package contains:
+This clean reproducibility package intentionally contains:
 
-- Repository metadata: `README.md`, `LICENSE`, `requirements.txt`, `.gitignore`, `citation.cff`
-- Raw-data instructions: `data/raw/README_raw_data.md`
-- Processed-data instructions and available processed outputs
-- Python scripts representing the five-stage reproducibility workflow
-- Jupyter notebook templates for each workflow stage
-- Main manuscript and supplementary material files
-- Main and supplementary tables
-- Final manuscript figures in PNG, PDF, and SVG formats
-- Documentation files for workflow, variables, references, and reproducibility checks
+- source-data access instructions;
+- 15 numbered executable analysis steps;
+- a full-pipeline runner;
+- pinned Python dependencies;
+- compact reference outputs for numerical verification;
+- Python-based main and supplementary figure generation;
+- reproducibility, variable, and output-mapping documentation;
+- citation metadata and license.
 
-Raw M5 dataset files are not included. Download them separately and place them in `data/raw/`.
+It intentionally excludes:
+
+- the manuscript;
+- Supplementary Material;
+- pre-rendered manuscript figures;
+- raw M5 source files;
+- large processed M5 derivatives;
+- internal project names and revision labels.
